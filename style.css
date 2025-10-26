@@ -1,0 +1,190 @@
+.wave-background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, #a8c0ff 0%, #3f2b96 100%);
+}
+
+.wave {
+  position: absolute;
+/*      left: 0;
+      right: 0;
+      height: 200px;
+      bottom: 0;*/
+      bottom: -135px;
+      height: 527px;
+      width: 100%;
+      overflow: hidden;
+}
+.wave {
+      position: absolute;
+      left: -180px;
+      bottom: 0;
+      width: 2402px;
+      height: 427px;
+      background: url(https://static.platzi.com/media/files/waves_c8551f5d-ecf6-4a81-ae1d-f3a0ad55ba10.png) center bottom no-repeat;
+      animation: 5s wave ease-in-out infinite alternate;
+    }
+
+#wave1 {
+  opacity: 0.6;
+  animation-delay: 0s;
+  background-position: 0 -854px;
+}
+
+#wave2 {
+ opacity: 0.4;
+  background-position: 0 -427px;
+      animation-delay: .6s;
+}
+
+#wave3 {
+   opacity: 0.2;
+   background-position: 0 0;
+      animation-delay: 1.2s;
+
+}
+
+@keyframes wave {
+      0% {
+        transform: translate(0 , 0);
+      }
+      50% {
+        transform: translate(-80px, 30px);
+      }
+      100% {
+        transform: translate(160px, -60px);
+      }
+    }
+
+
+body {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.container {
+ 
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+  padding: 2em;
+  border: 1px solid rgba(255,255,255,0.12); 
+  backdrop-filter: blur(10px) saturate(120%);    
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,9);
+  max-width: 600px;
+  width: 90%;
+  animation: fadeIn 1.5s ease;
+}
+
+h1 {
+  text-align: center;
+  color: #3f2b96;
+  text-align: left; 
+font-family: Arial Black; 
+font-weight: bold; font-size: 30px; 
+background: #202020; 
+-webkit-background-clip: text; 
+-moz-background-clip: text; 
+background-clip: text; 
+color: transparent; 
+text-shadow: 0px 3px 3px rgba(63, 43, 150,0.4),0px -1px 1px rgba(0,0,0,1);
+}
+
+.warning {
+  background: #ffe6e6;
+  border-left: 6px solid #ff4d4d;
+  padding: 10px;
+  font-size: 0.9em;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.question {
+  margin: 20px 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+  padding: 15px;
+  border: 1px solid rgba(255,255,255,0.12); 
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.question:hover {
+  transform: scale(1.02);
+}
+
+label {
+  display: block;
+  margin: 6px 0;
+  cursor: pointer;
+}
+
+.buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+button {
+    background: linear-gradient(180deg, rgba(36, 24, 84,0.5), rgba(36, 24, 84,0.9));
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.3s ease;
+  margin: 5px;
+}
+
+button:hover {
+  background: linear-gradient(180deg, rgba(63, 43, 150,0.5), rgba(63, 43, 150,0.9));
+}
+
+.reset {
+    background: linear-gradient(180deg, rgba(255,0,0,0.5), rgba(255,0,0,0.9));
+}
+
+.reset:hover {
+    background: linear-gradient(180deg, rgba(255,110,110,0.5), rgba(255,110,110,0.9));
+}
+
+#resultado {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1.1em;
+  padding: 15px;
+  border-radius: 10px;
+  animation: fadeIn 1s ease;
+}
+
+.alerta {
+  background: linear-gradient(180deg, rgba(255,120,120,0.10), rgba(255,120,120,0.9));
+  border: 1px solid rgba(255,255,255,0.12); 
+  color: #a00000;
+}
+
+.moderado {
+    background: linear-gradient(180deg, rgba(255,244,224,0.10), rgba(255,244,224,0.9));
+border: 1px solid rgba(255,255,255,0.12); 
+  color: #a65e00;
+}
+
+.bien {
+  background: linear-gradient(180deg, rgba(232,255,230,0.10), rgba(232,255,230,0.9));
+border: 1px solid rgba(255,255,255,0.12); 
+  color: #006600;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
