@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro del Test Psicológico</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wave-background">
+    <div class="wave" id="wave1"></div>
+    <div class="wave" id="wave2"></div>
+    <div class="wave" id="wave3"></div>
+  </div>
+
+  <div class="container">
+    <h1>Registro para el Test Psicológico</h1>
+
+    <div class="question" style="text-align:center;">
+      <p><strong>Por favor, ingresa tu nombre completo antes de comenzar:</strong></p>
+      <input type="text" id="nombre" placeholder="Escribe tu nombre aquí..."
+        style="width:90%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.3);
+        background:rgba(255,255,255,0.1);color:white;font-size:1em;text-align:center;">
+    </div>
+
+    <div class="buttons">
+      <button type="button" onclick="iniciarTest()">Comenzar Test</button>
+    </div>
+  </div>
+
+  <script>
+    function iniciarTest() {
+      const nombre = document.getElementById("nombre").value.trim();
+      if (!nombre) {
+        alert("Por favor, ingresa tu nombre antes de continuar.");
+        return;
+      }
+      localStorage.setItem("nombreParticipante", nombre);
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
