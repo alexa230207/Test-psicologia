@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historial de Resultados</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 1.1em;
+    }
+    th, td {
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background: rgba(63,43,150,0.8);
+      color: white;
+    }
+    tr:nth-child(even) {
+      background: rgba(255,255,255,0.08);
+    }
+    tr:nth-child(odd) {
+      background: rgba(255,255,255,0.15);
+    }
+    .chart-container {
+      margin-top: 50px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="wave-background">
+    <div class="wave" id="wave1"></div>
+    <div class="wave" id="wave2"></div>
+    <div class="wave" id="wave3"></div>
+  </div>
+
+  <div class="container">
+    <h1>📊 Historial de Participantes</h1>
+    <p style="text-align:center; color:white;">Aquí puedes ver todos los registros del test y su distribución general.</p>
+
+    <div id="listaResultados"></div>
+
+    <div class="buttons">
+      <button class="reset" onclick="borrarTodo()">Borrar todo</button>
+    </div>
+
+    <div class="chart-container">
+      <h2 style="text-align:center; color:white;">Distribución de Resultados</h2>
+      <canvas id="graficaResultados"></canvas>
+    </div>
+  </div>
+
+  <script>
+    function cargarResultados() {
+      const listaDiv = document.getElementById("listaResultados");
+      const registros = JSON.parse(localStorage.getItem("resultadosTest")) || [];
+
+      if (registros.length === 0) {
+        listaDiv.innerHTML = "<p style='text-align:center;'>No hay registros guardados.</p>";
+        actualizarGrafica(0, 0, 0);
+        return;
+      }
+
+      // Crear tabla amplia y ordenada
+      let html = "<table>";
+      html += "<tr><th>Nombre</th><th>Resultado</th><th>Fecha</th><th>Acción</th></tr>";
+
+      let depresion = 0, estres = 0, estable = 0;
+
+      registros.forEach((r, i) => {
+        html += `
+          <tr>
+            <td>${r.nombre}</td>
+            <td>${r.resultado}</td>
+            <td>${r.fecha}</td>
+            <td>
+              <button onclick="eliminar(${i})" 
+                      style="background:red; color:white; border:none; padding:6px 10px; border-radius:6px;">
+                Eliminar
+              </button>
+            </td>
+          </tr>`;
+
+        if (r.resultado.includes("depresión") || r.resultado.includes("ansiedad")) depresion++;
+        else if (r.resultado.includes("moderado")) estres++;
+        else estable++;
+      });
+
+      html += "</table>";
+      listaDiv.innerHTML = html;
+
+      // Actualiza gráfica
+      actualizarGrafica(depresion, estres, estable);
+    }
+
+    function eliminar(index) {
+      let registros = JSON.parse(localStorage.getItem("resultadosTest")) || [];
+      registros.splice(index, 1);
+      localStorage.setItem("resultadosTest", JSON.stringify(registros));
+      cargarResultados();
+    }
+
+    function borrarTodo() {
+      if (confirm("¿Estás seguro de borrar todos los registros?")) {
+        localStorage.removeItem("resultadosTest");
+        cargarResultados();
+      }
+    }
+
+    // ======== GRÁFICA =========
+    let grafica;
+    function actualizarGrafica(depresion, estres, estable) {
+      const ctx = document.getElementById('graficaResultados').getContext('2d');
+      const total = depresion + estres + estable;
+
+      const datos = total > 0 ? [
+        ((depresion / total) * 100).toFixed(1),
+        ((estres / total) * 100).toFixed(1),
+        ((estable / total) * 100).toFixed(1)
+      ] : [0, 0, 0];
+
+      if (grafica) grafica.destroy(); // Evita duplicar la gráfica
+
+      grafica = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: [
+            'Posible Depresión o Ansiedad',
+            'Estrés Moderado',
+            'Estable'
+          ],
+          datasets: [{
+            data: datos,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.8)',
+              'rgba(255, 206, 86, 0.8)',
+              'rgba(75, 192, 192, 0.8)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)'
+            ],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: 'white',
+                font: { size: 14 }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return context.label + ': ' + context.formattedValue + '%';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Inicializar tabla y gráfica
+    cargarResultados();
+  </script>
+</body>
+</html>
