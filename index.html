@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Fondo animado de olas -->
   <div class="wave-background">
     <div class="wave" id="wave1"></div>
     <div class="wave" id="wave2"></div>
@@ -16,6 +15,9 @@
 
   <div class="container">
     <h1>Test Psicológico de Autoevaluación</h1>
+
+    <p id="nombreUsuario" style="text-align:center; font-weight:bold; color:#3f2b96;"></p>
+
     <p class="warning">
       ⚠️ Este test es orientativo y no sustituye la valoración de un profesional.  
       Si sientes ansiedad, tristeza profunda o pensamientos negativos, busca ayuda profesional inmediata.
@@ -59,7 +61,7 @@
 
       <div class="buttons">
         <button type="button" onclick="calcularResultado()">Ver resultado</button>
-        <button type="button" class="reset" onclick="reiniciarTest()">Reiniciar Test</button>
+        <button type="button" class="reset" onclick="volverInicio()">Volver al inicio</button>
       </div>
     </form>
 
@@ -67,30 +69,58 @@
   </div>
 
   <script>
+    const nombre = localStorage.getItem("nombreParticipante");
+    const nombreUsuario = document.getElementById("nombreUsuario");
+
+    if (nombre) {
+      nombreUsuario.innerHTML = `Participante: <span style="color:#000;">${nombre}</span>`;
+    } else {
+      window.location.href = "registro.html";
+    }
+
     function calcularResultado() {
       const form = document.getElementById("testForm");
       const respuestas = new FormData(form);
       let total = 0;
       for (const valor of respuestas.values()) total += parseInt(valor);
+
+      if ([...respuestas.keys()].length < 5) {
+        alert("Por favor, responde todas las preguntas antes de ver el resultado.");
+        return;
+      }
+
       const resultadoDiv = document.getElementById("resultado");
-      
+      let resultadoTexto = "";
+
+      // 👉 Aquí está la parte con el color según el resultado:
       if (total >= 13) {
-        resultadoDiv.innerHTML = "<h2>Posible indicio de depresión o ansiedad.</h2><p>Te recomendamos hablar con un profesional de la salud mental.</p>";
+        resultadoTexto = "Posible indicio de depresión o ansiedad.";
+        resultadoDiv.innerHTML = "<h2>" + resultadoTexto + "</h2><p>Te recomendamos hablar con un profesional de la salud mental.</p>";
         resultadoDiv.className = "alerta";
       } else if (total >= 8) {
-        resultadoDiv.innerHTML = "<h2>Podrías estar experimentando estrés moderado.</h2><p>Procura descansar, hablar con alguien y cuidar tu salud mental.</p>";
+        resultadoTexto = "Podrías estar experimentando estrés moderado.";
+        resultadoDiv.innerHTML = "<h2>" + resultadoTexto + "</h2><p>Procura descansar, hablar con alguien y cuidar tu salud mental.</p>";
         resultadoDiv.className = "moderado";
       } else {
-        resultadoDiv.innerHTML = "<h2>Tu estado emocional parece estable.</h2><p>Aun así, es importante cuidar tu bienestar mental.</p>";
+        resultadoTexto = "Tu estado emocional parece estable.";
+        resultadoDiv.innerHTML = "<h2>" + resultadoTexto + "</h2><p>Aun así, es importante cuidar tu bienestar mental.</p>";
         resultadoDiv.className = "bien";
       }
+
+      guardarResultado(nombre, resultadoTexto);
     }
 
-    function reiniciarTest() {
-      document.getElementById("testForm").reset();
-      const resultadoDiv = document.getElementById("resultado");
-      resultadoDiv.innerHTML = "";
-      resultadoDiv.className = "";
+    function guardarResultado(nombre, resultadoTexto) {
+      let registros = JSON.parse(localStorage.getItem("resultadosTest")) || [];
+      const fecha = new Date().toLocaleString();
+      registros.push({ nombre, resultado: resultadoTexto, fecha });
+      localStorage.setItem("resultadosTest", JSON.stringify(registros));
+    }
+
+    // 🔹 Redirige al inicio (registro.html)
+    function volverInicio() {
+      localStorage.removeItem("nombreParticipante");
+      window.location.href = "registro.html";
     }
   </script>
 </body>
