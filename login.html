@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso a Registros</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wave-background">
+    <div class="wave" id="wave1"></div>
+    <div class="wave" id="wave2"></div>
+    <div class="wave" id="wave3"></div>
+  </div>
+
+  <div class="container">
+    <h1>Iniciar sesión</h1>
+
+    <div class="question" style="text-align:center;">
+      <input type="text" id="usuario" placeholder="Usuario" 
+             style="width:90%;padding:10px;margin:5px;border-radius:10px;text-align:center;">
+      <input type="password" id="contrasena" placeholder="Contraseña" 
+             style="width:90%;padding:10px;margin:5px;border-radius:10px;text-align:center;">
+    </div>
+
+    <div class="buttons">
+      <button onclick="iniciarSesion()">Entrar</button>
+    </div>
+  </div>
+
+  <script>
+    function iniciarSesion() {
+      const user = document.getElementById("usuario").value.trim();
+      const pass = document.getElementById("contrasena").value.trim();
+
+      if (user === "alexa" && pass === "12345") {
+        localStorage.setItem("adminLogueado", "true");
+        window.location.href = "historial.html";
+      } else {
+        alert("Usuario o contraseña incorrectos.");
+      }
+    }
+  </script>
+</body>
+</html>
